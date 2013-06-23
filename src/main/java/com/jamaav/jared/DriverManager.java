@@ -3,6 +3,8 @@ package com.jamaav.jared;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
+import com.jamaav.jared.internal.ConnectionImpl;
+
 public final class DriverManager {
   private DriverManager() {
   }
