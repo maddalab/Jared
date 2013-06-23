@@ -10,14 +10,16 @@ import org.junit.Test;
 public class ConnectionInitializationTest {
 
   @Test
-  public void testConnectionInitialization() throws ConnectionException {
-    DriverManager.getConnection("localhost", 28015);
+  public void testBasicConnection() throws ConnectionException {
+    Connection c = DriverManager.getConnection("localhost", 28015);
+    c.close();
   }
 
   @Test
   public void testConnectionInvalidAuthorization() throws ConnectionException {
     try {
-      DriverManager.getConnection("localhost", 28015, "fake-key");
+      Connection c = DriverManager.getConnection("localhost", 28015, "fake-key");
+      c.close();
       Assert.fail("Exception an authorization exception");
     } catch (InvalidAuthorizationException ex) {
       // ok to ignore expect this exception, we expect it for this test

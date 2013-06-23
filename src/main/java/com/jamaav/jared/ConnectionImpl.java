@@ -36,12 +36,18 @@ class ConnectionImpl implements Connection {
 
   private void closeConnectionWithException(ConnectionException primary)
       throws ConnectionException {
-    try {
-      socket.close();
-    } catch (IOException ex) {
-      // ignore this exception we will throw the primary exception passed in
-    }
+    safeCloseConnection();
     throw primary;
+  }
+
+  private void safeCloseConnection() {
+    if (!socket.isClosed()) {
+      try {
+        socket.close();
+      } catch (IOException ex) {
+        // ignore this exception we will throw the primary exception passed in
+      }
+    }
   }
 
   private void openConnection(InetSocketAddress addr)
@@ -99,5 +105,16 @@ class ConnectionImpl implements Connection {
     OutputStream out = socket.getOutputStream();
     out.write(buffer.array());
     out.flush();
+  }
+
+  @Override
+  public void close() {
+    safeCloseConnection();
+  }
+  
+  @Override
+  public void finalize() {
+    // if we close a connection here, it is bad, someone leaked a socket connection
+    safeCloseConnection();
   }
 }
