@@ -30,10 +30,17 @@ class StatementImpl implements Statement {
   public void dropDatabase(String database) throws ConnectionException,
       QueryException {
     Term ddl = Term.newBuilder().setType(TermType.DB_DROP)
-        .addArgs(DatumHelpers.newStringDatum(database)).build();
+        .addArgs(Converters.asTermWithDatum(database)).build();
     connection.executeDDL(ddl);
   }
+  
+  @Override
+  public void listDatabases() throws ConnectionException, QueryException {
+    Term query = Term.newBuilder().setType(TermType.DB_DROP).build();
+    connection.executeQuery(query);
+  }
 }
+
 
 class DatabaseStatementImpl implements DatabaseStatement {
   private final ConnectionImpl connection;
@@ -48,7 +55,7 @@ class DatabaseStatementImpl implements DatabaseStatement {
       boolean create) throws ConnectionException, QueryException {
     if (create) {
       Term ddl = Term.newBuilder().setType(TermType.DB_CREATE)
-          .addArgs(DatumHelpers.newStringDatum(database)).build();
+          .addArgs(Converters.asTermWithDatum(database)).build();
       connection.executeDDL(ddl);
     }
     this.connection = connection;

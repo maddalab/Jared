@@ -19,14 +19,14 @@ import com.jamaav.jared.ConnectionClosedException;
 import com.jamaav.jared.ConnectionException;
 import com.jamaav.jared.InvalidAuthorizationException;
 import com.jamaav.jared.InvalidResponseException;
-import com.jamaav.jared.Ql2.Datum.AssocPair;
+import com.jamaav.jared.Ql2.Query;
 import com.jamaav.jared.Ql2.Query.QueryType;
 import com.jamaav.jared.Ql2.Response;
 import com.jamaav.jared.Ql2.Response.ResponseType;
-import com.jamaav.jared.Ql2.Query;
 import com.jamaav.jared.Ql2.Term;
 import com.jamaav.jared.Ql2.VersionDummy;
 import com.jamaav.jared.QueryException;
+import com.jamaav.jared.ResultSet;
 import com.jamaav.jared.Statement;
 
 public class ConnectionImpl implements Connection {
@@ -145,26 +145,60 @@ public class ConnectionImpl implements Connection {
     safeCloseConnection();
   }
 
-  double executeDDL(Term ddl) throws ConnectionException, QueryException {
+  private void checkResponse(Query query, Response response)
+      throws QueryException {
+    if (response.getToken() != query.getToken()) {
+      throw new QueryException("Tokens on response and query differ.");
+    }
+    checkErrorCodes(response);
+  }
+
+  private void checkConnection() throws ConnectionClosedException {
     if (socket.isClosed()) {
       throw new ConnectionClosedException(
           "Cannot execute query on a closed connection.");
     }
+  }
+
+  void executeDDL(Term ddl) throws ConnectionException, QueryException {
+    checkConnection();
     Query query = Query.newBuilder().setToken(token.incrementAndGet())
         .setType(QueryType.START).setQuery(ddl).build();
 
     send(query);
     Response response = recv();
-    if (response.getToken() != query.getToken()) {
-      throw new QueryException("Tokens on response and query differ.");
-    }
-    checkErrorCodes(response);
+    checkResponse(query, response);
     // ddls can only respond with an atom
     assert response.getType() == ResponseType.SUCCESS_ATOM;
-    AssocPair pair = response.getResponse(0).getRObject(0);
-    String key = pair.getKey();
-    assert key.equals("created");
-    return pair.getVal().getRNum();
+  }
+
+  public ResultSet executeQuery(Term term) throws ConnectionException,
+      QueryException {
+    checkConnection();
+    long tv = token.incrementAndGet();
+    Query query = Query.newBuilder().setToken(tv).setType(QueryType.START)
+        .setQuery(term).build();
+
+    send(query);
+    Response response = recv();
+    checkResponse(query, response);
+
+    return parseResponse(response, term, tv);
+  }
+
+  private ResultSet parseResponse(Response response, Term term, long token) {
+    ResponseType type = response.getType();
+    switch (type) {
+    case SUCCESS_ATOM:
+      if (response.getResponseCount() == 0) {
+        return new EmptyResultResultSet(term, token);
+      }
+      return new SingleResultResultSet(term, token, response.getResponse(0));
+    case SUCCESS_PARTIAL:
+      return new ResultSetImpl(term, token, response.getResponseList(), false);
+    default:
+      return new ResultSetImpl(term, token, response.getResponseList(), true);
+    }
   }
 
   private void checkErrorCodes(Response response) throws QueryException {
