@@ -160,7 +160,7 @@ public class ConnectionImpl implements Connection {
     }
   }
 
-  void executeDDL(Term ddl) throws ConnectionException, QueryException {
+  void executeUpdate(Term ddl) throws ConnectionException, QueryException {
     checkConnection();
     Query query = Query.newBuilder().setToken(token.incrementAndGet())
         .setType(QueryType.START).setQuery(ddl).build();
@@ -172,7 +172,7 @@ public class ConnectionImpl implements Connection {
     assert response.getType() == ResponseType.SUCCESS_ATOM;
   }
 
-  public ResultSet executeQuery(Term term) throws ConnectionException,
+  public ResultSet execute(Term term) throws ConnectionException,
       QueryException {
     checkConnection();
     long tv = token.incrementAndGet();

@@ -4,6 +4,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.jamaav.jared.Ql2.Term;
+
 public class DatabaseQueriesTest {
 
   @Before
@@ -12,7 +14,9 @@ public class DatabaseQueriesTest {
 
     try {
       Statement s = c.createStatement();
-      s.createDatabase("superheroes");
+      QueryBuilder qb = new QueryBuilder();
+      Term query = qb.createDatabase("superheroes").build();
+      s.executeUpdate(query);
     } finally {
       c.close();
     }
@@ -24,7 +28,9 @@ public class DatabaseQueriesTest {
 
     try {
       Statement s = c.createStatement();
-      s.dropDatabase("superheroes");
+      QueryBuilder qb = new QueryBuilder();
+      Term query = qb.dropDatabase("superheroes").build();
+      s.executeUpdate(query);
     } finally {
       c.close();
     }

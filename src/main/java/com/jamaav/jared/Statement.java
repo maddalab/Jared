@@ -1,14 +1,12 @@
 package com.jamaav.jared;
 
+import com.jamaav.jared.Ql2.Term;
+
 public interface Statement {
-  public DatabaseStatement useDatabase(String database)
-      throws ConnectionException, QueryException;
 
-  public DatabaseStatement createDatabase(String database)
-      throws ConnectionException, QueryException;
-
-  public void dropDatabase(String database) throws ConnectionException,
+  public abstract void execute(Term query) throws ConnectionException,
       QueryException;
 
-  public void listDatabases() throws ConnectionException, QueryException;
+  public abstract void executeUpdate(Term query)
+      throws ConnectionException, QueryException;
 }
