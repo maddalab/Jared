@@ -1,10 +1,13 @@
 package com.jamaav.jared;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.jamaav.jared.Ql2.Term;
 
 public class DatabaseQueriesTest {
 
@@ -13,10 +16,8 @@ public class DatabaseQueriesTest {
     Connection c = DriverManager.getConnection("localhost", 28015);
 
     try {
-      Statement s = c.createStatement();
-      QueryBuilder qb = new QueryBuilder();
-      Term query = qb.createDatabase("superheroes").build();
-      s.executeUpdate(query);
+      Rethink r = Rethink.r(c);
+      r.createDatabase("superheroes");
     } finally {
       c.close();
     }
@@ -27,17 +28,25 @@ public class DatabaseQueriesTest {
     Connection c = DriverManager.getConnection("localhost", 28015);
 
     try {
-      Statement s = c.createStatement();
-      QueryBuilder qb = new QueryBuilder();
-      Term query = qb.dropDatabase("superheroes").build();
-      s.executeUpdate(query);
+      Rethink r = Rethink.r(c);
+      r.dropDatabase("superheroes");
     } finally {
       c.close();
     }
   }
 
   @Test
-  public void testListDatabases() {
+  public void testListDatabases() throws ConnectionException, QueryException {
+    Connection c = DriverManager.getConnection("localhost", 28015);
 
+    try {
+      Rethink r = Rethink.r(c);
+      String[] dbs = r.listDatabases();
+      Set<String> tables = new HashSet<>(Arrays.asList(dbs));
+      Assert.assertTrue(tables.contains("test"));
+      Assert.assertTrue(tables.contains("superheroes"));
+    } finally {
+      c.close();
+    }
   }
 }

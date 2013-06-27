@@ -26,4 +26,9 @@ public final class QueryBuilder {
   public Term build() {
     return builder.build();
   }
+
+  public QueryBuilder listDatabases() {
+    builder.setType(TermType.DB_LIST);
+    return this;
+  }
 }

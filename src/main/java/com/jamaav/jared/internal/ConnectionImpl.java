@@ -213,9 +213,7 @@ public class ConnectionImpl implements Connection {
     case RUNTIME_ERROR:
       throw new QueryRuntimeException(response.getResponse(0).getRStr(),
           response.getBacktrace());
-    case SUCCESS_ATOM:
-    case SUCCESS_PARTIAL:
-    case SUCCESS_SEQUENCE:
+    default: // ignore -- cases involving success
     }
   }
 
