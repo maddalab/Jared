@@ -18,10 +18,8 @@ public class Rethink {
     Term q = qb.listDatabases().build();
     Statement statement = connection.createStatement();
     ResultSet rs = statement.execute(q);
-    for (ResultRow row : rs) {
-      return row.getStringArray();
-    }
-    throw new RuntimeException();
+    ResultRow row = rs.get();
+    return row.getStringArray();
   }
 
   public void createDatabase(String database) throws ConnectionException,

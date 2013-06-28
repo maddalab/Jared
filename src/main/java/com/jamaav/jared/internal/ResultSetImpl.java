@@ -92,6 +92,7 @@ class ResultRowImpl implements ResultRow {
 abstract class AbstractResultSetImpl implements ResultSet {
   private final long token;
   private final List<Datum> data;
+  private int currentIndex;
 
   AbstractResultSetImpl(List<Datum> data, long token) {
     this.data = data;
@@ -103,26 +104,17 @@ abstract class AbstractResultSetImpl implements ResultSet {
   }
 
   @Override
-  public Iterator<ResultRow> iterator() {
-    return new Iterator<ResultRow>() {
-      Iterator<Datum> it = data.iterator();
+  public boolean next() {
+    return currentIndex < data.size();
+  }
 
-      @Override
-      public boolean hasNext() {
-        return it.hasNext();
-      }
-
-      @Override
-      public ResultRow next() {
-        return new ResultRowImpl(it.next());
-      }
-
-      @Override
-      public void remove() {
-        throw new UnsupportedOperationException();
-      }
-
-    };
+  @Override
+  public ResultRow get() {
+    if (currentIndex < 0 || currentIndex > data.size() - 1) {
+      throw new IndexOutOfBoundsException(String.format(
+          "Index %d into result set is incorrect", currentIndex));
+    }
+    return new ResultRowImpl(data.get(currentIndex++));
   }
 }
 
