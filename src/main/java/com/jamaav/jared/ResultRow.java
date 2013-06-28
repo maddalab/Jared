@@ -2,11 +2,7 @@ package com.jamaav.jared;
 
 public interface ResultRow {
 
-  public abstract ReObject get();
-
   public abstract ReObject getObj();
-
-  public abstract Object[] getArray() throws ConversionException;
 
   public abstract ReObject[] getObjArray();
 

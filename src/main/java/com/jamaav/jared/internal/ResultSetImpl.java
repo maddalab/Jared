@@ -1,10 +1,8 @@
 package com.jamaav.jared.internal;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
-import com.jamaav.jared.ConversionException;
 import com.jamaav.jared.Ql2.Datum;
 import com.jamaav.jared.Ql2.Term;
 import com.jamaav.jared.ReObject;
@@ -74,18 +72,8 @@ class ResultRowImpl implements ResultRow {
   }
 
   @Override
-  public Object[] getArray() throws ConversionException {
-    return Converters.asArray(data);
-  }
-
-  @Override
   public ReObject getObj() {
     return Converters.asObj(data);
-  }
-
-  @Override
-  public ReObject get() {
-    return null;
   }
 }
 
