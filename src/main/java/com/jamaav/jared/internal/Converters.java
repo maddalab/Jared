@@ -185,13 +185,21 @@ public final class Converters {
     }
   }
 
-  public static Term asTermWithDatum(String database) {
-    return Term
-        .newBuilder()
-        .setType(TermType.DATUM)
-        .setDatum(
-            Datum.newBuilder().setType(DatumType.R_STR).setRStr(database)
-                .build()).build();
+  public static Term asTermWithDatum(String value) {
+    return Term.newBuilder().setType(TermType.DATUM).setDatum(asDatum(value))
+        .build();
   }
 
+  public static Datum asDatum(String value) {
+    return Datum.newBuilder().setType(DatumType.R_STR).setRStr(value).build();
+  }
+
+  public static Datum asDatum(double value) {
+    return Datum.newBuilder().setType(DatumType.R_NUM).setRNum(value).build();
+  }
+
+  public static Term asTermWithDatum(double value) {
+    return Term.newBuilder().setType(TermType.DATUM).setDatum(asDatum(value))
+        .build();
+  }
 }

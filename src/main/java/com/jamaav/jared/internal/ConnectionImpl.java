@@ -20,13 +20,10 @@ import com.jamaav.jared.ConnectionException;
 import com.jamaav.jared.InvalidAuthorizationException;
 import com.jamaav.jared.InvalidResponseException;
 import com.jamaav.jared.Ql2.Query;
-import com.jamaav.jared.Ql2.Query.QueryType;
 import com.jamaav.jared.Ql2.Response;
 import com.jamaav.jared.Ql2.Response.ResponseType;
-import com.jamaav.jared.Ql2.Term;
 import com.jamaav.jared.Ql2.VersionDummy;
 import com.jamaav.jared.QueryException;
-import com.jamaav.jared.ResultSet;
 import com.jamaav.jared.Statement;
 
 public class ConnectionImpl implements Connection {
@@ -160,45 +157,22 @@ public class ConnectionImpl implements Connection {
     }
   }
 
-  void executeUpdate(Term ddl) throws ConnectionException, QueryException {
+  void executeUpdate(Query query) throws ConnectionException, QueryException {
     checkConnection();
-    Query query = Query.newBuilder().setToken(token.incrementAndGet())
-        .setType(QueryType.START).setQuery(ddl).build();
 
     send(query);
     Response response = recv();
     checkResponse(query, response);
-    // ddls can only respond with an atom
+
     assert response.getType() == ResponseType.SUCCESS_ATOM;
   }
 
-  public ResultSet execute(Term term) throws ConnectionException,
-      QueryException {
+  Response execute(Query query) throws ConnectionException, QueryException {
     checkConnection();
-    long tv = token.incrementAndGet();
-    Query query = Query.newBuilder().setToken(tv).setType(QueryType.START)
-        .setQuery(term).build();
-
     send(query);
     Response response = recv();
     checkResponse(query, response);
-
-    return parseResponse(response, term, tv);
-  }
-
-  private ResultSet parseResponse(Response response, Term term, long token) {
-    ResponseType type = response.getType();
-    switch (type) {
-    case SUCCESS_ATOM:
-      if (response.getResponseCount() == 0) {
-        return new EmptyResultResultSet(term, token);
-      }
-      return new SingleResultResultSet(term, token, response.getResponse(0));
-    case SUCCESS_PARTIAL:
-      return new ResultSetImpl(term, token, response.getResponseList(), false);
-    default:
-      return new ResultSetImpl(term, token, response.getResponseList(), true);
-    }
+    return response;
   }
 
   private void checkErrorCodes(Response response) throws QueryException {
@@ -268,5 +242,9 @@ public class ConnectionImpl implements Connection {
     } catch (IOException ex) {
       throw new ConnectionException("Failed to send query to server", ex);
     }
+  }
+
+  public long nextToken() {
+    return token.incrementAndGet();
   }
 }

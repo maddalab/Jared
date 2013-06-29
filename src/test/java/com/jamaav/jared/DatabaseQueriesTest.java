@@ -16,8 +16,7 @@ public class DatabaseQueriesTest {
     Connection c = DriverManager.getConnection("localhost", 28015);
 
     try {
-      Rethink r = Rethink.r(c);
-      r.createDatabase("superheroes");
+      Rethink.r(c).createDatabase("superheroes");
     } finally {
       c.close();
     }
@@ -28,8 +27,7 @@ public class DatabaseQueriesTest {
     Connection c = DriverManager.getConnection("localhost", 28015);
 
     try {
-      Rethink r = Rethink.r(c);
-      r.dropDatabase("superheroes");
+      Rethink.r(c).database("superheroes").drop();
     } finally {
       c.close();
     }
