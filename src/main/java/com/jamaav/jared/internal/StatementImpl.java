@@ -13,9 +13,9 @@ import com.jamaav.jared.Statement;
 import com.jamaav.jared.util.Strings;
 
 class StatementImpl implements Statement {
-  private final ConnectionImpl connection;
+  private final Connection connection;
 
-  StatementImpl(ConnectionImpl connection) {
+  StatementImpl(Connection connection) {
     this.connection = connection;
   }
 

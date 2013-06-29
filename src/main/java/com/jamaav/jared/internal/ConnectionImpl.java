@@ -14,7 +14,6 @@ import java.nio.ByteOrder;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.google.protobuf.AbstractMessage;
-import com.jamaav.jared.Connection;
 import com.jamaav.jared.ConnectionClosedException;
 import com.jamaav.jared.ConnectionException;
 import com.jamaav.jared.InvalidAuthorizationException;
@@ -157,7 +156,9 @@ public class ConnectionImpl implements Connection {
     }
   }
 
-  void executeUpdate(Query query) throws ConnectionException, QueryException {
+  @Override
+  public void executeUpdate(Query query) throws ConnectionException,
+      QueryException {
     checkConnection();
 
     send(query);
@@ -167,7 +168,9 @@ public class ConnectionImpl implements Connection {
     assert response.getType() == ResponseType.SUCCESS_ATOM;
   }
 
-  Response execute(Query query) throws ConnectionException, QueryException {
+  @Override
+  public Response execute(Query query) throws ConnectionException,
+      QueryException {
     checkConnection();
     send(query);
     Response response = recv();
@@ -244,6 +247,7 @@ public class ConnectionImpl implements Connection {
     }
   }
 
+  @Override
   public long nextToken() {
     return token.incrementAndGet();
   }
