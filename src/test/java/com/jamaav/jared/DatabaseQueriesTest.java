@@ -16,7 +16,7 @@ public class DatabaseQueriesTest {
     Connection c = DriverManager.getConnection("localhost", 28015);
 
     try {
-      Rethink.r(c).createDatabase("superheroes");
+      Rethink.r(c).database("superheroes").create();
     } finally {
       c.close();
     }

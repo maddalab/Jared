@@ -34,16 +34,6 @@ public class Rethink {
     return row.getStringArray();
   }
 
-  public Rethink createDatabase(String database) throws ConnectionException,
-      QueryException {
-    Statement s = connection.createStatement();
-    QueryBuilder qb = new QueryBuilder();
-    Term query = qb.createDatabase(database).build();
-    s.executeUpdate(query);
-    database(database);
-    return this;
-  }
-
   public Rethink drop() throws ConnectionException, QueryException {
     checkDatabase();
     Statement s = connection.createStatement();
@@ -91,6 +81,15 @@ public class Rethink {
     Term query = qb.dropTable(table).build();
     s.executeUpdate(query, database);
     table(null);
+    return this;
+  }
+
+  public Rethink create() throws ConnectionException, QueryException {
+    Statement s = connection.createStatement();
+    QueryBuilder qb = new QueryBuilder();
+    Term query = qb.createDatabase(database).build();
+    s.executeUpdate(query);
+    database(database);
     return this;
   }
 }

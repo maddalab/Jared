@@ -10,7 +10,7 @@ public class TableQueriesTest {
     Connection c = DriverManager.getConnection("localhost", 28015);
 
     try {
-      Rethink.r(c).createDatabase("superheroes").createTable("marvel");
+      Rethink.r(c).database("superheroes").create().createTable("marvel");
     } finally {
       c.close();
     }
@@ -29,6 +29,10 @@ public class TableQueriesTest {
 
   @Test
   public void testListTables() {
-
+    try {
+      
+    } finally {
+      
+    }
   }
 }
