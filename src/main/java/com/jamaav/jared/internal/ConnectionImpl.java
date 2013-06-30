@@ -22,8 +22,11 @@ import com.jamaav.jared.Ql2.Query;
 import com.jamaav.jared.Ql2.Response;
 import com.jamaav.jared.Ql2.Response.ResponseType;
 import com.jamaav.jared.Ql2.VersionDummy;
+import com.jamaav.jared.QueryClientException;
+import com.jamaav.jared.QueryCompileException;
 import com.jamaav.jared.QueryException;
-import com.jamaav.jared.Statement;
+import com.jamaav.jared.QueryRuntimeException;
+import com.jamaav.jared.db.Statement;
 
 public class ConnectionImpl implements Connection {
   private static final String SUCCESS = "SUCCESS";

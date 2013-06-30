@@ -1,8 +1,9 @@
-package com.jamaav.jared;
+package com.jamaav.jared.db;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
+import com.jamaav.jared.ConnectionException;
 import com.jamaav.jared.internal.ConnectionImpl;
 
 public final class DriverManager {

@@ -5,7 +5,7 @@ import com.jamaav.jared.Ql2.Query;
 import com.jamaav.jared.Ql2.Response;
 import com.jamaav.jared.QueryException;
 
-public interface Connection extends com.jamaav.jared.Connection {
+public interface Connection extends com.jamaav.jared.db.Connection {
 
   public long nextToken();
 

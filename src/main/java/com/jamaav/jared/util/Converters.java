@@ -1,4 +1,4 @@
-package com.jamaav.jared.internal;
+package com.jamaav.jared.util;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +9,7 @@ import com.jamaav.jared.Ql2.Datum;
 import com.jamaav.jared.Ql2.Datum.DatumType;
 import com.jamaav.jared.Ql2.Term;
 import com.jamaav.jared.Ql2.Term.TermType;
-import com.jamaav.jared.ReObject;
+import com.jamaav.jared.db.ReObject;
 
 public final class Converters {
   private Converters() {

@@ -1,8 +1,8 @@
-package com.jamaav.jared;
+package com.jamaav.jared.db;
 
 import com.jamaav.jared.Ql2.Term;
 import com.jamaav.jared.Ql2.Term.TermType;
-import com.jamaav.jared.internal.Converters;
+import com.jamaav.jared.util.Converters;
 
 public final class QueryBuilder {
   private final Term.Builder builder;

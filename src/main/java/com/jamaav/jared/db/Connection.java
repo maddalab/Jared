@@ -1,4 +1,6 @@
-package com.jamaav.jared;
+package com.jamaav.jared.db;
+
+import com.jamaav.jared.ConnectionClosedException;
 
 public interface Connection {
   public void close();

@@ -1,6 +1,8 @@
-package com.jamaav.jared;
+package com.jamaav.jared.db;
 
+import com.jamaav.jared.ConnectionException;
 import com.jamaav.jared.Ql2.Term;
+import com.jamaav.jared.QueryException;
 
 public interface Statement {
 

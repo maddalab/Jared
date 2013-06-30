@@ -1,4 +1,4 @@
-package com.jamaav.jared;
+package com.jamaav.jared.db;
 
 public interface ResultRow {
 

@@ -1,6 +1,11 @@
 package com.jamaav.jared;
 
 import com.jamaav.jared.Ql2.Term;
+import com.jamaav.jared.db.Connection;
+import com.jamaav.jared.db.QueryBuilder;
+import com.jamaav.jared.db.ResultRow;
+import com.jamaav.jared.db.ResultSet;
+import com.jamaav.jared.db.Statement;
 import com.jamaav.jared.util.Strings;
 
 public class Rethink {

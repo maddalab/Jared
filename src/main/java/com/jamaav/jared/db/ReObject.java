@@ -1,11 +1,12 @@
-package com.jamaav.jared;
+package com.jamaav.jared.db;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jamaav.jared.ConversionException;
 import com.jamaav.jared.Ql2.Datum;
-import com.jamaav.jared.internal.Converters;
+import com.jamaav.jared.util.Converters;
 
 public class ReObject {
   private Map<String, Datum> m_data = new HashMap<String, Datum>();

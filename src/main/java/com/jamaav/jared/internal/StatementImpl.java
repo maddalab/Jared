@@ -8,8 +8,9 @@ import com.jamaav.jared.Ql2.Response.ResponseType;
 import com.jamaav.jared.Ql2.Term;
 import com.jamaav.jared.Ql2.Term.TermType;
 import com.jamaav.jared.QueryException;
-import com.jamaav.jared.ResultSet;
-import com.jamaav.jared.Statement;
+import com.jamaav.jared.db.ResultSet;
+import com.jamaav.jared.db.Statement;
+import com.jamaav.jared.util.Converters;
 import com.jamaav.jared.util.Strings;
 
 class StatementImpl implements Statement {

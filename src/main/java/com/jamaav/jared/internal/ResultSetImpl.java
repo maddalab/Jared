@@ -5,9 +5,10 @@ import java.util.List;
 
 import com.jamaav.jared.Ql2.Datum;
 import com.jamaav.jared.Ql2.Term;
-import com.jamaav.jared.ReObject;
-import com.jamaav.jared.ResultRow;
-import com.jamaav.jared.ResultSet;
+import com.jamaav.jared.db.ReObject;
+import com.jamaav.jared.db.ResultRow;
+import com.jamaav.jared.db.ResultSet;
+import com.jamaav.jared.util.Converters;
 
 class ResultRowImpl implements ResultRow {
   private final Datum data;
