@@ -34,6 +34,16 @@ public class Rethink {
     return row.getStringArray();
   }
 
+  public String[] listTables() throws ConnectionException, QueryException {
+    checkDatabase();
+    QueryBuilder qb = new QueryBuilder();
+    Term q = qb.listTables().build();
+    Statement statement = connection.createStatement();
+    ResultSet rs = statement.execute(q, database);
+    ResultRow row = rs.get();
+    return row.getStringArray();
+  }
+
   public Rethink drop() throws ConnectionException, QueryException {
     checkDatabase();
     Statement s = connection.createStatement();

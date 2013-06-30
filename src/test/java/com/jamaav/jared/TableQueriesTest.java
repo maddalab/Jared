@@ -1,6 +1,7 @@
 package com.jamaav.jared;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,11 +29,14 @@ public class TableQueriesTest {
   }
 
   @Test
-  public void testListTables() {
+  public void testListTables() throws ConnectionException, QueryException {
+    Connection c = DriverManager.getConnection("localhost", 28015);
     try {
-      
+      String[] tables = Rethink.r(c).database("superheroes").listTables();
+      Assert.assertEquals(1, tables.length);
+      Assert.assertEquals("marvel", tables[0]);
     } finally {
-      
+      c.close();
     }
   }
 }

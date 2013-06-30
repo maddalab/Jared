@@ -32,6 +32,11 @@ public final class QueryBuilder {
     return this;
   }
 
+  public QueryBuilder listTables() {
+    builder.setType(TermType.TABLE_LIST);
+    return this;
+  }
+
   public QueryBuilder createTable(String table) {
     builder.setType(TermType.TABLE_CREATE).addArgs(
         Converters.asTermWithDatum(table));
