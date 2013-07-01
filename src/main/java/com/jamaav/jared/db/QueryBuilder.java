@@ -37,6 +37,13 @@ public final class QueryBuilder {
     return this;
   }
 
+  public QueryBuilder listIndexes(String table) {
+    builder.setType(TermType.INDEX_LIST).addArgs(
+        Term.newBuilder().setType(TermType.TABLE)
+            .addArgs(Converters.asTermWithDatum(table)));
+    return this;
+  }
+
   public QueryBuilder createTable(String table) {
     builder.setType(TermType.TABLE_CREATE).addArgs(
         Converters.asTermWithDatum(table));
@@ -66,6 +73,26 @@ public final class QueryBuilder {
   public QueryBuilder dropTable(String table) {
     builder.setType(TermType.TABLE_DROP).addArgs(
         Converters.asTermWithDatum(table));
+    return this;
+  }
+
+  public QueryBuilder createIndex(String table, String index) {
+    builder
+        .setType(TermType.INDEX_CREATE)
+        .addArgs(
+            Term.newBuilder().setType(TermType.TABLE)
+                .addArgs(Converters.asTermWithDatum(table)))
+        .addArgs(Converters.asTermWithDatum(index));
+    return this;
+  }
+
+  public QueryBuilder dropIndex(String table, String index) {
+    builder
+        .setType(TermType.INDEX_DROP)
+        .addArgs(
+            Term.newBuilder().setType(TermType.TABLE)
+                .addArgs(Converters.asTermWithDatum(table)))
+        .addArgs(Converters.asTermWithDatum(index));
     return this;
   }
 }

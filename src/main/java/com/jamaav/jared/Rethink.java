@@ -26,8 +26,9 @@ public class Rethink {
     return this;
   }
 
-  public void table(String table) {
+  public Rethink table(String table) {
     this.table = table;
+    return this;
   }
 
   public String[] listDatabases() throws ConnectionException, QueryException {
@@ -49,7 +50,7 @@ public class Rethink {
     return row.getStringArray();
   }
 
-  public Rethink drop() throws ConnectionException, QueryException {
+  public Rethink dropDatabase() throws ConnectionException, QueryException {
     checkDatabase();
     Statement s = connection.createStatement();
     QueryBuilder qb = new QueryBuilder();
@@ -67,8 +68,14 @@ public class Rethink {
 
   private void checkDatabase() {
     if (Strings.isEmpty(database))
-      throw new RuntimeException(
-          "Attempt to execute table operation without specifying a database");
+      throw new NoDatabaseException(
+          "Attempt to execute database operation without specifying a database");
+  }
+
+  private void checkTable() {
+    if (Strings.isEmpty(table))
+      throw new NoTableException(
+          "Attempt to execute table operation without specifying a table");
   }
 
   public void createTable(String table, CreateTableOptions options)
@@ -89,8 +96,9 @@ public class Rethink {
     table(table);
   }
 
-  public Rethink dropTable(String table) throws ConnectionException,
-      QueryException {
+  public Rethink dropTable() throws ConnectionException, QueryException {
+    checkTable();
+    checkDatabase();
     Statement s = connection.createStatement();
     QueryBuilder qb = new QueryBuilder();
     Term query = qb.dropTable(table).build();
@@ -99,12 +107,43 @@ public class Rethink {
     return this;
   }
 
-  public Rethink create() throws ConnectionException, QueryException {
+  public Rethink dropIndex(String index) throws ConnectionException,
+      QueryException {
+    Statement s = connection.createStatement();
+    QueryBuilder qb = new QueryBuilder();
+    Term query = qb.dropIndex(table, index).build();
+    s.executeUpdate(query, database);
+    return this;
+  }
+
+  public Rethink createDatabase() throws ConnectionException, QueryException {
     Statement s = connection.createStatement();
     QueryBuilder qb = new QueryBuilder();
     Term query = qb.createDatabase(database).build();
     s.executeUpdate(query);
     database(database);
     return this;
+  }
+
+  public Rethink createIndex(String index) throws ConnectionException,
+      QueryException {
+    checkDatabase();
+    checkTable();
+    Statement s = connection.createStatement();
+    QueryBuilder qb = new QueryBuilder();
+    Term query = qb.createIndex(table, index).build();
+    s.executeUpdate(query, database);
+    return this;
+  }
+
+  public String[] listIndexes() throws ConnectionException, QueryException {
+    checkTable();
+    checkDatabase();
+    QueryBuilder qb = new QueryBuilder();
+    Term q = qb.listIndexes(table).build();
+    Statement statement = connection.createStatement();
+    ResultSet rs = statement.execute(q, database);
+    ResultRow row = rs.get();
+    return row.getStringArray();
   }
 }

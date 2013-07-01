@@ -15,7 +15,7 @@ public class TableQueriesTest {
     Connection c = DriverManager.getConnection("localhost", 28015);
 
     try {
-      Rethink.r(c).database("superheroes").create().createTable("marvel");
+      Rethink.r(c).database("superheroes").createDatabase().createTable("marvel");
     } finally {
       c.close();
     }
@@ -26,7 +26,7 @@ public class TableQueriesTest {
     Connection c = DriverManager.getConnection("localhost", 28015);
 
     try {
-      Rethink.r(c).database("superheroes").dropTable("marvel").drop();
+      Rethink.r(c).database("superheroes").table("marvel").dropTable().dropDatabase();
     } finally {
       c.close();
     }
@@ -55,7 +55,7 @@ public class TableQueriesTest {
     Rethink r = Rethink.r(c).database("superheroes");
     try {
       r.createTable("dc", options);
-      r.dropTable("dc");
+      r.dropTable();
     } finally {
       c.close();
     }
